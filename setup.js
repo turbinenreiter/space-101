@@ -13,12 +13,13 @@ var Engine = Matter.Engine,
 
 // create world, engine and renderer
 var center = {x: window.innerWidth / 2, y: window.innerHeight / 2}
-var world = World.create({gravity: {x: 0, y: 0, scale: 0}});
-var engine = Engine.create({world: world, timing: {timeScale: 1}});
 var canvas = document.createElement('canvas');
 var context = canvas.getContext('2d');
 canvas.width = window.clientWidth;
 canvas.height = window.clientHeight;
+
+var world = World.create({gravity: {x: 0, y: 0, scale: 0}});
+var engine = Engine.create({world: world, timing: {timeScale: 1}});
 var render = Render.create({
     engine: engine,
     element: document.body,
@@ -50,8 +51,6 @@ var render = Render.create({
 
 Render.run(render);
 
-var runner = Runner.create();
-
 MatterAttractors.Attractors.gravityConstant = 0.01;
 
 // create bodies
@@ -67,39 +66,23 @@ var earth = Bodies.circle(center.x, center.y, 5*size,
                            render: {fillStyle: '#2196F3',
                                     strokeStyle: '#4CAF50',
                                     lineWidth: 10}});
-var sc = Bodies.trapezoid(center.x, center.y - earth.circleRadius, 2*size, 3*size, 1,
+var sc = Bodies.trapezoid(center.x, center.y-earth.circleRadius-size, 2*size, 3*size, 1,
                           {frictionAir: 0,
                            render: {fillStyle: '#3F51B5',
                                     lineWidth: 0}});
 
 var e1 = Vector.sub(sc.position, earth.position);
 
-sc_positions = Array(128).fill([sc.position.x, sc.position.y]);
-Events.on(engine, 'afterUpdate', function(event) {
-    // fix earth
-    Body.setPosition(earth, center);
-    // rotate rocket
-    var l = sc_positions.length - 64;
-    sc_pos_old = Vector.create(sc_positions[l], sc_positions[l+1]);
-    var earth_sc_vec = Vector.sub(sc.position, earth.position);
-//    var v_vec = Vector.sub(sc.position, sc_pos_old);
-    var earth_sc_angle = Math.atan(earth_sc_vec.x / earth_sc_vec.y) -90;
-    alpha = Math.atan(earth_sc_vec.x / earth_sc_vec.y) * 180 / Math.PI;
-//    console.log(sc.position.x, sc.position.y, alpha);
-    Body.setAngle(sc, earth_sc_angle);
-    // draw path
-    sc_positions.push(sc.position.x);
-    sc_positions.push(sc.position.y);
-    if(l > 2048) {
-        sc_positions.shift();
-        sc_positions.shift();
-    }
+function draw_flight_path() {
     context.beginPath();
     context.curve(sc_positions);
     context.lineWidth = 2;
     context.strokeStyle = '#3F51B5';
     context.stroke();
     context.closePath();
+}
+
+function draw_center_path() {
     // draw path to center
     context.beginPath();
     context.moveTo(earth.position.x, earth.position.y);
@@ -116,6 +99,41 @@ Events.on(engine, 'afterUpdate', function(event) {
     context.strokeStyle = '#F44336';
     context.stroke();
     context.closePath();
+}
+
+var fligh_path = true;
+var center_path = false;
+sc_positions = Array(128).fill([sc.position.x, sc.position.y]);
+Events.on(engine, 'afterUpdate', function(event) {
+    // fix earth
+    Body.setPosition(earth, center);
+
+    // rotate rocket
+    var l = sc_positions.length - 64;
+    sc_pos_old = Vector.create(sc_positions[l], sc_positions[l+1]);
+    var earth_sc_vec = Vector.sub(sc.position, earth.position);
+    var quadrant = 0;
+    if(earth_sc_vec.x > 0 && earth_sc_vec.y < 0) {
+        quadrant = Math.PI / 2;
+    } else if(earth_sc_vec.x > 0 && earth_sc_vec.y > 0) {
+        quadrant = -Math.PI / 2;
+    } else if(earth_sc_vec.x < 0 && earth_sc_vec.y > 0) {
+        quadrant = -Math.PI / 2;
+    } else if(earth_sc_vec.x < 0 && earth_sc_vec.y < 0) {
+        quadrant = Math.PI / 2;
+    }
+    var earth_sc_angle = quadrant - Math.atan(earth_sc_vec.x / earth_sc_vec.y);
+    Body.setAngle(sc, earth_sc_angle);
+
+    // draw paths
+    sc_positions.push(sc.position.x);
+    sc_positions.push(sc.position.y);
+    if(l > 2048) {
+        sc_positions.shift();
+        sc_positions.shift();
+    }
+    if(fligh_path) { draw_flight_path(); }
+    if(center_path) { draw_center_path(); }
 });
 
 function doSetTimeout(sc, force, start, i, STEP_t) {
