@@ -22,7 +22,7 @@ var world = World.create({gravity: {x: 0, y: 0, scale: 0}});
 var engine = Engine.create({world: world, timing: {timeScale: 1}});
 var render = Render.create({
     engine: engine,
-    element: document.body,
+    element: document.getElementsByClassName("space")[0],
     canvas: canvas,
     options: {width: window.innerWidth,
               height: window.innerHeight,
@@ -123,7 +123,8 @@ Events.on(engine, 'afterUpdate', function(event) {
         quadrant = Math.PI / 2;
     }
     var earth_sc_angle = quadrant - Math.atan(earth_sc_vec.x / earth_sc_vec.y);
-    Body.setAngle(sc, earth_sc_angle);
+    //Body.setAngle(sc, earth_sc_angle);
+    Body.rotate(sc, earth_sc_angle - sc.angle);
 
     // draw paths
     sc_positions.push(sc.position.x);

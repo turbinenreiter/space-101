@@ -1,30 +1,27 @@
-var runner = Runner.create();
-
-var first = true;
-var pause = true;
-fligh_path = true;
-center_path = false;
+var slide_no = 0;
 
 window.onkeyup = function(e) {
-   var key = e.keyCode ? e.keyCode : e.which;
-    console.log(key);
+    var key = e.keyCode ? e.keyCode : e.which;
 
-    if (key == 13) { //enter
-        if(first) {
-            burn({x: 0, y: -8.5*force}, 1000, 1000);
-            burn({x: 2.5*force, y: 0}, 2000, 5000);
-        }
-        Runner.start(runner, engine);
-        first = false;
-    } else if (key == 27) { // escape
-        Runner.stop(runner);
-    } else if (key == 67) { // c
-        center_path = !center_path;
-    } else if (key == 70) { // f
-        fligh_path = !fligh_path;
+    if (key == 39) { // right
+        slide_no += 1;
+    } else if (key == 37) { // left
+        slide_no -= 1;
+    } else {
+        spacekey(key);
     }
-};
 
-setTimeout(function() {
-        Runner.stop(runner);
-    }, 100000);
+    var divsToHide = document.getElementsByTagName("section");
+    for(var i = 0; i < divsToHide.length; i++){
+        divsToHide[i].style.display = "none";
+    }
+    
+    if(slide_no <= 0) {
+        slide_no = 0;
+    } else if (slide_no > divsToHide.length) {
+        slide_no = divsToHide.length+1;
+    } else {
+        document.getElementById(slide_no.toString()).style.display = "block"
+    }
+    console.log(key, slide_no, divsToHide.length);
+};
