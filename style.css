@@ -1,3 +1,8 @@
+html, body, section {
+    height: 100%;
+    width: 100%;
+}
+
 body {
     text-rendering: optimizeLegibility;
     font-variant-ligatures: common-ligatures;
@@ -5,7 +10,7 @@ body {
 
     font-family: 'Source Sans Pro', sans-serif;
     font-weight: 400;
-    font-size: calc(16px + 0.15vw + 0.15vh);
+    font-size: calc(64px + 0.15vw + 0.15vh);
     line-height: 1.4;
     hyphens: auto;
 
@@ -14,7 +19,12 @@ body {
 }
 
 section {
-    font-size: calc(2*(16px + 0.15vw + 0.15vh));
+    margin: 0;
+    display: none;
+}
+
+section h1 {
+    font-size: calc(2*(64px + 0.15vw + 0.15vh));
     text-align: center;
     color: #FFC107;
     margin: 0;
@@ -22,7 +32,6 @@ section {
     top: 50%;
     left: 50%;
     transform: translate(-50%, -50%);
-    display: none;
 }
 
 /*header {*/
