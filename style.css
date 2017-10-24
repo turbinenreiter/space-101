@@ -52,6 +52,11 @@ section p b {
     color: #4CAF50;
 }
 
+a {
+    color:inherit;
+    text-decoration: none;
+}
+
 /*header {*/
 /*    font-family: 'Source Code Pro', monospace;*/
 /*    margin-top: 2em;*/

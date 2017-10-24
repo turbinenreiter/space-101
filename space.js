@@ -5,16 +5,16 @@ center_path = false;
 
 function spacekey(key) {
     if (key == 13) { //enter
-        if(slide_no == 5) {
+        if(slide_no == 6) {
             Runner.stop(runner);
             create_space(slide_no);
             burn({x: 0, y: -8.5*force}, 1000, 1000);
-        } else if(slide_no == 6) {
+        } else if(slide_no == 7) {
             Runner.stop(runner);
             create_space(slide_no);
             burn({x: 0, y: -8.5*force}, 1000, 1000);
             burn({x: 1.25*force, y: 0}, 2000, 5000);
-        } else if(slide_no == 7) {
+        } else if(slide_no == 8) {
             Runner.stop(runner);
             create_space(slide_no);
             burn({x: 0, y: -8.5*force}, 1000, 1000);

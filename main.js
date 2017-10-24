@@ -2,10 +2,10 @@ var slide_no = 0;
 var first_2 = true;
 
 function do_js(slide_no) {
-    if(slide_no == 2 && first_2) {
-        window.open('http://mgvez.github.io/jsorrery/', '_blank');
-        first_2 = false;
-    }
+//    if(slide_no == 2 && first_2) {
+//        window.open('http://mgvez.github.io/jsorrery/', '_blank');
+//        first_2 = false;
+//    }
 }
 
 window.onkeyup = function(e) {
