@@ -6,7 +6,7 @@ Run
 
 * donwload zip or clone repo
 * unpack zip or cd into repo
-* open `index.html`
+* open `index.html` using Chrome (no idea if it works in other browser)
 
 Navigation
 ----------
